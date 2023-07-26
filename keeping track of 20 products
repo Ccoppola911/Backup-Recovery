@@ -1,0 +1,105 @@
+import json
+import os
+
+# Define the file name for the backup
+BACKUP_FILE = "product_backup.json"
+
+# Define the initial product data
+products = {
+    "product1": {
+        "name": "Product 1",
+        "quantity": 10,
+        "price": 100.0
+    },
+    "product2": {
+        "name": "Product 2",
+        "quantity": 20,
+        "price": 200.0
+    },
+    "product3": {
+        "name": "Product 3",
+        "quantity": 25,
+        "price": 56
+    },
+    "product4": {
+        "name": "Product 4",
+        "quantity": 56,
+        "price": 56
+    },
+    "product5": {
+        "name": "Product 5",
+        "quantity": 75,
+        "price": 78
+    },
+    "product6": {
+        "name": "Product 6",
+        "quantity": 75,
+        "price": 42
+    },
+    "product7": {
+        "name": "Product 7",
+        "quantity": 82,
+        "price": 64
+    },
+    "product8": {
+        "name": "Product 8",
+        "quantity": 52,
+        "price": 95
+    },
+    "product9": {
+        "name": "Product 9",
+        "quantity": 38,
+        "price": 46
+    },
+    "product10": {
+        "name": "Product 10",
+        "quantity": 57,
+        "price": 62
+    },
+}
+
+# Check if a backup file exists and load the data
+if os.path.exists(BACKUP_FILE):
+    with open(BACKUP_FILE, "r") as f:
+        products = json.load(f)
+
+# Define a function to save the product data to a backup file
+def backup_data():
+    with open(BACKUP_FILE, "w") as f:
+        json.dump(products, f)
+
+# Define a function to add a new product
+def add_product(name, quantity, price):
+    product_id = "product{}".format(len(products) + 1)
+    products[product_id] = {
+        "name": name,
+        "quantity": quantity,
+        "price": price
+    }
+    backup_data()
+
+# Define a function to update an existing product
+def update_product(product_id, name=None, quantity=None, price=None):
+    if product_id in products:
+        if name is not None:
+            products[product_id]["name"] = name
+        if quantity is not None:
+            products[product_id]["quantity"] = quantity
+        if price is not None:
+            products[product_id]["price"] = price
+        backup_data()
+
+# Define a function to delete a product
+def delete_product(product_id):
+    if product_id in products:
+        del products[product_id]
+        backup_data()
+
+# Call the add_product function to add a new product
+add_product("Product 3", 30, 300.0)
+
+# Call the update_product function to update an existing product
+update_product("product1", name="New Product Name")
+
+# Call the delete_product function to delete a product
+delete_product("product2")
